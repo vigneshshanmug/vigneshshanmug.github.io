@@ -34,6 +34,15 @@ params:
     emails:
       - "vshanmugam@bwh.harvard.edu"
     name_variants: ["Vignesh Shanmugam", "V. Shanmugam", "V Shanmugam", "Shanmugam V"]
+    # Social profiles: shown under the homepage buttons and in the footer; also tells search engines these are yours.
+    social:
+      - name: "LinkedIn"
+        icon: "linkedin"
+        url: "https://www.linkedin.com/in/vignesh-shanmugam-b0b168106/"
+      - name: "X"
+        icon: "x"
+        handle: "@Vignesh_Shan"
+        url: "https://x.com/Vignesh_Shan"
 
   appearance:
     color: custom          # assets/css/themes/custom.css

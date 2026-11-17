@@ -415,3 +415,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 420px) { .gk-tiles { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .gk-tile a:hover, .gk-tile a:focus-visible { transform: none; } }
 .gk-work__card .gk-tiles li { border-bottom: 0; padding: 0; }
+
+/* ---------- Social links ---------- */
+.gk-social { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .9rem; }
+.gk-social a { display: inline-flex; align-items: center; gap: .4rem; color: var(--color-text) !important; text-decoration: none; }
+.gk-social a:hover { color: var(--color-link-hover) !important; text-decoration: underline; }
+.gk-social svg { flex: none; color: #444; }
+.gk-social a:hover svg { color: var(--color-link-hover); }
+.gk-social__handle { color: var(--color-text-muted); }
+.gk-social--footer { margin-top: .5rem; font-size: .85rem; }
+.gk-social--footer a, .gk-social--footer svg { color: #fff !important; }
+.gk-social--footer .gk-social__handle { color: #aab0b7; }
+@media (max-width: 640px) { .gk-social--hero { justify-content: center; } }

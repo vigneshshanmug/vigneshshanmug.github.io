@@ -5,6 +5,7 @@
       <p class="gk-footer__name">{{ site.Params.owner.name }}</p>
       <p>{{ delimit site.Params.owner.institutions " · " }}</p>
       <p>{{ range $i, $e := site.Params.owner.emails }}{{ if $i }} · {{ end }}<a href="mailto:{{ $e }}">{{ $e }}</a>{{ end }}</p>
+      {{ partial "social_links.html" (dict "class" "gk-social--footer") }}
     </div>
     <nav class="gk-footer__nav" aria-label="{{ i18n "footer_navigation" }}">
       <ul>

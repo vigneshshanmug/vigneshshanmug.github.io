@@ -17,6 +17,7 @@
   "email" (printf "mailto:%s" (index site.Params.owner.emails 0))
   "image" (resources.Get "images/portrait.jpg" | fingerprint).Permalink
   "url" site.BaseURL
+  "sameAs" (apply (site.Params.owner.social | default slice) "index" "." "url")
   "isBasedOn" "https://gking.harvard.edu/mysite"
 -}}
 {{ $p | jsonify | safeJS }}

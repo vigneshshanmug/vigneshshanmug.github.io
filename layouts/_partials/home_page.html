@@ -13,6 +13,7 @@
         <a class="gk-btn gk-btn--primary" href="{{ "science/" | relURL }}">{{ i18n "science" }} <span aria-hidden="true">→</span></a>
         <a class="gk-btn gk-btn--primary" href="{{ "medicine/" | relURL }}">{{ i18n "medicine" }} <span aria-hidden="true">→</span></a>
       </p>
+      {{ partial "social_links.html" (dict "class" "gk-social--hero") }}
     </div>
     <div class="gk-hero__photo">
       <img src="{{ $hero.RelPermalink }}" width="900" height="900" alt="{{ $o.name }} in the laboratory at Brigham and Women's Hospital">
