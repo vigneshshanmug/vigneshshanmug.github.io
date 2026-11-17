@@ -1,4 +1,4 @@
-module github.com/vigneshshanmug/vigneshshan.github.io
+module github.com/vigneshshanmug/vigneshshanmug.github.io
 
 go 1.22
 

@@ -1,4 +1,4 @@
-baseURL: "https://vigneshshanmug.github.io/vigneshshan.github.io/"  # MUST end with slash
+baseURL: "https://vigneshshanmug.github.io/"  # MUST end with slash
 title: "Vignesh Shanmugam"
 languageCode: en-us
 enableRobotsTXT: true

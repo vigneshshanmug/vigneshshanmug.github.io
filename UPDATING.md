@@ -105,6 +105,6 @@ Both are in `content/_index.md`: the short bio (top of the homepage) is the `int
 
 ```bash
 npm ci                 # once
-hugo server -D         # then open http://localhost:1313/vigneshshan.github.io/
+hugo server -D         # then open http://localhost:1313/
 ```
 Search works only on the published site (or after `hugo && npx pagefind --site public`).
