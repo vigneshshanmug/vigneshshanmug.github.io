@@ -16,11 +16,7 @@ Email: [vshanmugam@bwh.harvard.edu](mailto:vshanmugam@bwh.harvard.edu)
 
 ### Broad Institute of MIT and Harvard
 
-Cancer Program<br>
 Cambridge, MA 02142
-
-Email: [vshanmug@broadinstitute.org](mailto:vshanmug@broadinstitute.org)
-
 </div>
 </div>
 
