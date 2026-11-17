@@ -27,3 +27,8 @@
 {{- if and (in (slice "publication" "talk") .Section) .IsPage (not .Params.private) }}
   {{ partial "scholarly_meta.html" . }}
 {{- end }}
+
+{{- /* GoatCounter visitor statistics: only on the published site (not local previews), only if a code is set. */ -}}
+{{- with site.Params.analytics.goatcounter }}{{ if hugo.IsProduction }}
+<script data-goatcounter="https://{{ . }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+{{- end }}{{ end }}

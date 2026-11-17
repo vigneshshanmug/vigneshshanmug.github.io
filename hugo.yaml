@@ -58,6 +58,11 @@ params:
     name: "Read on Substack"
     max_posts: 30
 
+  # ── Visitor statistics (GoatCounter: free, no cookies, no consent banner) ──
+  # Put your GoatCounter code here (the "xxx" in xxx.goatcounter.com). Leave empty to turn tracking off.
+  analytics:
+    goatcounter: "vigneshshanmug"
+
   # ── GaryKing.org/mysite options (from the owner's information form) ──
   mysite:
     credit: true       # "Footer credit" box was checked

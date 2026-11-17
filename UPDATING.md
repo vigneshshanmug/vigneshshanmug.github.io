@@ -108,3 +108,9 @@ npm ci                 # once
 hugo server -D         # then open http://localhost:1313/
 ```
 Search works only on the published site (or after `hugo && npx pagefind --site public`).
+
+## Visitor statistics
+
+The site uses GoatCounter (free, no cookies). Your dashboard: `https://<code>.goatcounter.com`.
+The code is set in `hugo.yaml` → `params.analytics.goatcounter`; set it to `""` to switch tracking off.
+Local previews are never counted, only the published site.
