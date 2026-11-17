@@ -1,0 +1,14 @@
+<!doctype html>
+{{- $language_code := site.LanguageCode | default "en-us" -}}
+<html lang="{{ $language_code }}" dir="ltr" data-wc-theme-default="light">
+  {{ partial "site_head" . }}
+  <body class="page-wrapper gk-body" id="top">
+    <a href="#main-content" class="gk-skip-link">{{ i18n "skip_to_content" }}</a>
+    {{ partial "components/headers/navbar.html" . }}
+    <main id="main-content" tabindex="-1" class="page-body">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "site_footer.html" . }}
+    {{ partial "components/search-modal.html" . }}
+  </body>
+</html>

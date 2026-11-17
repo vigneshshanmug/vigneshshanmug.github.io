@@ -1,0 +1,7 @@
+{{/* Featured thumbnail for a page bundle (featured.jpg/png next to index.md).
+     Input: dict "page" "w" "h" "class" "lazy". Renders nothing if no image. */}}
+{{- $img := .page.Resources.GetMatch "featured.*" -}}
+{{- with $img -}}
+  {{- $t := .Fill (printf "%dx%d webp TopLeft q78" (mul $.w 2) (mul $.h 2)) -}}
+  <img class="{{ $.class }}" src="{{ $t.RelPermalink }}" width="{{ $.w }}" height="{{ $.h }}" alt="{{ $.page.Title }}"{{ if ne $.lazy false }} loading="lazy" decoding="async"{{ end }}>
+{{- end -}}

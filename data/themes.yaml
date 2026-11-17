@@ -1,0 +1,107 @@
+# Science and Medicine pages are built from this file.
+# Each theme lists the papers to feature, by folder name in content/publication/ (order = display order).
+# Theme summaries were drafted from the papers' abstracts; edit them freely.
+# A paper can appear in more than one theme. Papers not listed here still appear on the full
+# publications list (/publication/).
+
+science:
+  - id: lymphoma-ecosystems
+    title: "Spatial ecology of lymphoma"
+    summary: >-
+      In many lymphomas the malignant cells are a small minority, surrounded by immune and stromal
+      cells they depend on. Using genome-scale spatial transcriptomics, single-cell genomics and spatial
+      proteomics, this work maps the cellular niches that sustain tumor cells, identifying IL13
+      signaling through IL4R/IL13RA1 as a survival dependency in classic Hodgkin lymphoma, defining how
+      Epstein–Barr virus reorganizes the Hodgkin lymphoma microenvironment, and charting the loss of
+      lymph-node organizing stroma and the expansion of fibroblasts and GPNMB+ macrophages during
+      follicular lymphoma transformation.
+    papers:
+      - genome-scale-spatial-mapping-hodgkin-lymphoma-2025
+      - epstein-barr-virus-orchestrates-spatial-reorganization-2026
+      - follicular-lymphoma-transformation-characterized-cytokine-associated-2026
+      - cancer-specific-innate-adaptive-immune-rewiring-2024
+
+  - id: spatial-methods
+    title: "Spatial and computational genomics methods"
+    summary: >-
+      Tools for measuring and analyzing gene expression in intact tissue: Slide-tags single-nucleus
+      spatial barcoding, joint spatial maps of T-cell receptors and transcriptomes, cell type-specific
+      differential expression in spatial transcriptomics, stable tensor factorization for
+      zero-inflated genomics data, and machine-learning cell type annotation from multiplexed tissue images.
+    papers:
+      - slide-tags-enables-single-nucleus-barcoding-2024
+      - spatial-maps-t-cell-receptors-transcriptomes-2022
+      - cell-type-specific-inference-differential-expression-2022
+      - c-ziptf-stable-tensor-factorization-zero-2024
+      - maps-pathologist-level-cell-type-annotation-2024
+
+  - id: b-cell-signaling
+    title: "Oncogenic signaling in B-cell lymphomagenesis"
+    summary: >-
+      How lymphoma-associated alterations rewire normal B-cell programs: Notch activation that is
+      pervasive in splenic marginal zone lymphoma and concentrated in specific microenvironments,
+      the inability of MYD88 L265P alone to transform mature B cells, and loss of miR-15a/16-1 in
+      activated B cells driving plasma cell and mature B-cell neoplasms.
+    papers:
+      - notch-activation-pervasive-smzl-uncommon-dlbcl-2021
+      - human-myd88l265p-insufficient-itself-drive-neoplastic-2019
+      - mir-15a-16-1-deletion-activated-2021
+
+medicine:
+  - id: molecular-diagnostics
+    title: "Molecular diagnostics in hematologic neoplasms"
+    # IGV (igv.js) view of TP53 codon 72 in public 1000 Genomes exome data (sample HG01879, hg19), rendered for this site.
+    image: "images/themes/igv-tp53.png"
+    summary: >-
+      Bringing sequencing into diagnostic practice: targeted next-generation sequencing of peripheral
+      blood in patients with unexplained cytopenias, liquid-biopsy circulating tumor DNA profiling across
+      hematopoietic neoplasms, and the clonal relationship between skin and bone marrow disease in
+      cutaneous myeloid neoplasms.
+    papers:
+      - clinical-utility-targeted-next-generation-sequencing-2019
+      - liquid-biopsy-based-circulating-tumour-ct-2024
+      - cutaneous-manifestations-myeloid-neoplasms-exhibit-broad-2024
+      - npm1-mutant-acute-myeloid-leukemia-relapsing-2021
+      - molecular-versus-morphologic-classifications-myeloproliferative-neoplasms-2019
+
+  - id: histiocytic-neoplasms
+    title: "Histiocytic and dendritic cell neoplasms"
+    image: "images/themes/lch-cd1a.jpg"
+    image_credit: 'Langerhans cell histiocytosis, CD1a. Jensflorian, <a href="https://commons.wikimedia.org/wiki/File:Langerhans_cell-histiocytosis_CD1a.jpg">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>'
+    summary: >-
+      Recurrent RAS–MAPK pathway mutations in histiocytic sarcoma, with a clinical response to MEK
+      inhibition; cyclin D1 as a diagnostic marker of Langerhans cell histiocytosis; KRAS-mutant
+      Rosai–Dorfman disease; and ultraviolet-radiation mutagenesis in the skin-based transformation of
+      blastic plasmacytoid dendritic cell neoplasm.
+    papers:
+      - identification-diverse-activating-mutations-ras-mapk-2019
+      - cyclin-d1-expressed-neoplastic-cells-langerhans-2017
+      - ultraviolet-radiation-shapes-dendritic-cell-leukaemia-2023
+      - rosai-dorfman-disease-activating-kras-mutation-2017
+      - many-faces-same-myeloid-neoplasm-case-2019
+
+  - id: lymphoma-pathology
+    title: "Diagnostic lymphoma pathology"
+    image: "images/themes/follicular-lymphoma.jpg"
+    image_credit: 'Follicular lymphoma, low magnification. Nephron, <a href="https://commons.wikimedia.org/wiki/File:Follicular_lymphoma_--_low_mag.jpg">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>'
+    summary: >-
+      Clinicopathologic and genomic characterization of uncommon lymphomas and diagnostic pitfalls,
+      including JAK–STAT pathway alterations in primary cutaneous cytotoxic T-cell lymphomas and
+      unusual presentations of T-cell, B-cell and myeloid neoplasms.
+    papers:
+      - primary-cytotoxic-t-cell-lymphomas-harbor-2021
+      - follicular-lymphoma-research-open-dialogue-collaborative-2025
+      - aggressive-cd4-cd8-double-negative-primary-2021
+      - unusual-case-chronic-lymphocytic-leukemia-small-2017
+      - acute-myeloid-leukemia-minimal-differentiation-aml-2019
+
+  - id: education
+    title: "Reference and teaching"
+    image: "images/themes/microscope.jpg"
+    image_credit: 'Pathologist with microscope. Bill Branson, National Cancer Institute, <a href="https://commons.wikimedia.org/wiki/File:Pathologist_with_microscope.jpg">Wikimedia Commons</a>, public domain'
+    summary: >-
+      Chapters and reference entries on hematopathology and molecular diagnostics.
+    papers:
+      - lymphomas-2019
+      - langerhans-cell-histiocytosis
+      - chronic-neutrophilic-leukemia

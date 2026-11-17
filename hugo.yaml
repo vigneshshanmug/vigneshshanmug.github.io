@@ -1,0 +1,110 @@
+baseURL: "https://vigneshshanmug.github.io/vigneshshan.github.io/"  # MUST end with slash
+title: "Vignesh Shanmugam"
+languageCode: en-us
+enableRobotsTXT: true
+disableKinds: ["taxonomy", "term"]   # tags are used for filtering and See Also, not as pages
+timeZone: America/New_York
+
+module:
+  hugoVersion:
+    extended: true
+    min: "0.148.2"
+  imports:
+    - path: github.com/HugoBlox/hugo-blox-builder/modules/blox-tailwind
+
+outputs:
+  home: [HTML, RSS, JSON]
+  section: [HTML, RSS]
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true   # allow HTML comments (owner notes) in Markdown
+
+params:
+  # ── Owner identity (single source of truth for templates) ──
+  owner:
+    name: "Vignesh Shanmugam"
+    initials: "VS"
+    title: "Clinical Investigator and Staff Pathologist, Brigham and Women's Hospital, Instructor in Pathology, Harvard Medical School"
+    institutions:
+      - "Brigham and Women's Hospital"
+      - "Harvard Medical School"
+      - "Broad Institute"
+    emails:
+      - "vshanmugam@bwh.harvard.edu"
+      - "vshanmug@broadinstitute.org"
+    name_variants: ["Vignesh Shanmugam", "V. Shanmugam", "V Shanmugam", "Shanmugam V"]
+
+  appearance:
+    color: custom          # assets/css/themes/custom.css
+    mode: light
+    font: native
+    font_size: L
+  header:
+    navbar:
+      enable: true
+      show_search: false   # Blox's own search is disabled; our Pagefind modal replaces it
+      logo:
+        text: "Vignesh Shanmugam"
+  features:
+    search:
+      enable: false
+  hugoblox:
+    analytics: {}
+
+  # ── Substack: the Blog page lists the latest posts from this publication ──
+  substack:
+    url: "https://vigneshshan1992.substack.com"
+    name: "Read on Substack"
+    max_posts: 30
+
+  # ── GaryKing.org/mysite options (from the owner's information form) ──
+  mysite:
+    credit: true       # "Footer credit" box was checked
+    discovery: true    # "Invisible marker" box was checked
+    design:
+      seed: "reference-site"
+      concept: "Modeled on the owner's chosen reference site, https://gking.harvard.edu/: dark institutional banner, pale-blue hero with photo at right, dense citation lists, dark footer. Structure simplified by the owner to Science / Medicine / Blog / Contact."
+
+taxonomies:
+  tag: tags
+  publication_type: publication_types
+  # No `author` taxonomy: the site has no People page (removed at the owner's request).
+
+permalinks:
+  page:
+    publication: /publication/:contentbasename/
+    talk: /talk/:contentbasename/
+    blog: /blog/:contentbasename/
+
+related:
+  includeNewer: true
+  threshold: 80
+  toLower: true
+  indices:
+    - name: tags
+      weight: 100
+
+menu:
+  main:
+    - name: Science
+      url: science/
+      weight: 10
+    - name: Medicine
+      url: medicine/
+      weight: 20
+    - name: Blog
+      url: blog/
+      weight: 30
+    - name: Contact
+      url: contact/
+      weight: 40
+  # The full publications list (/publication/) is linked from the Science and Medicine pages, not the menu.
+
+caches:
+  getresource:
+    maxAge: 1h   # re-read the Substack feed at most hourly in local builds (CI always fetches fresh)
+
+sitemap:
+  changefreq: monthly

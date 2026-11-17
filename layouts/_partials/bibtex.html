@@ -1,0 +1,21 @@
+{{- $info := partial "item_info.html" . -}}
+{{- $type := "article" -}}
+{{- if eq $info.tab "presentations" }}{{ $type = "misc" }}{{ else if eq $info.tab "book" }}{{ $type = "incollection" }}{{ end -}}
+{{- $first := index (split (index (.Params.authors | default (slice "anon")) 0) " ") 0 -}}
+{{- $last := (split (index (.Params.authors | default (slice "anon")) 0) " ") | last 1 -}}
+{{- $key := printf "%s%s%s" (index $last 0) $info.year (index (findRE `[A-Za-z]{4,}` .Title 1 | default (slice "x")) 0) | lower | replaceRE `[^a-z0-9]` "" -}}
+@{{ $type }}{ {{- $key -}},
+  title = { {{- .Title -}} },
+  author = { {{- delimit (.Params.authors | default slice) " and " -}} },
+{{- with $info.year }}
+  year = { {{- . -}} },{{ end }}
+{{- if eq $type "article" }}{{ with .Params.journal }}
+  journal = { {{- . -}} },{{ end }}{{ end }}
+{{- if eq $type "incollection" }}
+  booktitle = { {{- .Params.publication -}} },{{ end }}
+{{- if eq $type "misc" }}
+  howpublished = { {{- .Params.event -}} },{{ end }}
+{{- with .Params.doi }}
+  doi = { {{- . -}} },{{ end }}
+  url = { {{- .Permalink -}} }
+}

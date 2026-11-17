@@ -1,0 +1,20 @@
+{{/* Returns dict: tab (writings tab id), kind (See-Also label key), year (string, may be "").
+     Label precedence: publication_types before section name. */}}
+{{- $types := .Params.publication_types | default slice -}}
+{{- $tab := "articles" -}}
+{{- $kind := "paper" -}}
+{{- if or (eq .Section "talk") (in $types "presentation") -}}
+  {{- $tab = "presentations" -}}{{- $kind = "presentation" -}}
+{{- else if or (in $types "book") (in $types "book_chapter") (in $types "chapter") -}}
+  {{- $tab = "book" -}}{{- $kind = cond (in $types "book") "book" "chapter" -}}
+{{- else if in $types "data" -}}
+  {{- $tab = "data" -}}{{- $kind = "dataset" -}}
+{{- else if in $types "software" -}}
+  {{- $tab = "software" -}}{{- $kind = "software" -}}
+{{- else if in $types "patent" -}}
+  {{- $tab = "patents" -}}{{- $kind = "patent" -}}
+{{- else if or (in $types "report") (in $types "working_paper") -}}
+  {{- $tab = "working-papers" -}}{{- $kind = "paper" -}}
+{{- end -}}
+{{- $year := cond .Date.IsZero "" (.Date.Format "2006") -}}
+{{- return (dict "tab" $tab "kind" $kind "year" $year) -}}

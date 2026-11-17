@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{/* Generic page (Bio & C.V., Contact, …): breadcrumbs, optional portrait, prose body. */}}
+<article class="gk-page gk-generic{{ with .Params.page_class }} {{ . }}{{ end }}" data-pagefind-body data-pagefind-meta="title:{{ .Title }}">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{- if .Params.portrait }}
+  <div class="gk-bio-head">
+    <img class="gk-portrait" src="{{ .Params.portrait | relURL }}" width="200" height="200" alt="{{ .Params.portrait_alt | default (printf "Portrait of %s" site.Params.owner.name) }}">
+    <div class="gk-bio-head__text">
+      <p class="gk-bio-head__name">{{ site.Params.owner.name }}, M.D.</p>
+      <p>{{ site.Params.owner.title }}</p>
+      <p class="gk-muted">{{ delimit site.Params.owner.institutions " · " }}</p>
+      <p>{{ range $i, $e := site.Params.owner.emails }}{{ if $i }} · {{ end }}<a href="mailto:{{ $e }}">{{ $e }}</a>{{ end }}</p>
+    </div>
+  </div>
+  {{- end }}
+  <div class="prose">{{ .Content }}</div>
+</article>
+{{ end }}

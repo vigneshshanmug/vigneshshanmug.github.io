@@ -1,0 +1,12 @@
+{{- $crumbs := slice -}}
+{{- if .IsPage -}}
+  {{- with .Parent -}}{{- if not .IsHome -}}{{- $crumbs = $crumbs | append (dict "t" .Title "u" .RelPermalink) -}}{{- end -}}{{- end -}}
+  {{- if eq .Section "talk" -}}{{- $crumbs = slice (dict "t" (i18n "writings") "u" ("publication/" | relURL)) (dict "t" (i18n "tab_presentations") "u" ("talk/" | relURL)) -}}{{- end -}}
+{{- end -}}
+<nav class="gk-crumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="{{ "" | relURL }}">{{ i18n "home" }}</a></li>
+    {{- range $crumbs }}<li><a href="{{ .u }}">{{ .t }}</a></li>{{ end }}
+    <li aria-current="page">{{ .Title | truncate 70 }}</li>
+  </ol>
+</nav>

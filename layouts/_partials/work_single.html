@@ -1,0 +1,46 @@
+{{- $info := partial "item_info.html" . -}}
+<article class="gk-page gk-pub" data-pagefind-body data-pagefind-meta="title:{{ .Title }}">
+  {{ partial "breadcrumbs.html" . }}
+  <h1 class="gk-pub__title">{{ .Title }}</h1>
+
+  <p class="gk-pub__authors">{{ partial "authors_inline.html" (dict "authors" .Params.authors "short" false) }}</p>
+  {{ with .Params.author_notes }}<p class="gk-pub__note">{{ . }}</p>{{ end }}
+
+  <p class="gk-pub__venue">
+    {{- with .Params.event }}<span>{{ . }}</span>{{ else }}{{ with .Params.publication }}<em>{{ . }}</em>{{ end }}{{ end -}}
+    {{- if not .Date.IsZero }}<span class="gk-pub__date"> · <time datetime="{{ .Date.Format "2006-01-02" }}">{{ if eq $info.tab "presentations" }}{{ .Date.Format "Jan 2006" }}{{ else }}{{ .Date.Format "Jan 2, 2006" }}{{ end }}</time></span>{{ end -}}
+  </p>
+  {{ with .Params.award }}<p><span class="gk-badge">{{ . }}</span></p>{{ end }}
+
+  {{- if or .Params.links .Params.doi }}
+  <div class="gk-pub__actions">
+    {{- range $i, $l := .Params.links }}
+      <a class="gk-btn {{ if eq $i 0 }}gk-btn--primary{{ else }}gk-btn--chip{{ end }}" href="{{ if hasPrefix $l.url "http" }}{{ $l.url }}{{ else }}{{ $l.url | relURL }}{{ end }}">{{ $l.name }}</a>
+    {{- end }}
+    <details class="gk-cite">
+      <summary class="gk-btn gk-btn--chip">{{ i18n "cite" }}</summary>
+      <pre class="gk-cite__bib" tabindex="0">{{ partial "bibtex.html" . }}</pre>
+    </details>
+  </div>
+  {{- end }}
+
+  <div class="gk-pub__body">
+    {{- $img := .Resources.GetMatch "featured.*" -}}
+    {{- with $img }}
+    {{- $r := .Resize "680x webp q80" -}}
+    <figure class="gk-pub__image">
+      <img src="{{ $r.RelPermalink }}" width="{{ div $r.Width 2 }}" height="{{ div $r.Height 2 }}" alt="{{ $.Title }}">
+      {{ with $.Params.image_credit }}<figcaption>{{ . }}</figcaption>{{ end }}
+    </figure>
+    {{- end }}
+    {{- with .Params.abstract }}
+    <section id="abstract" class="gk-pub__abstract">
+      <h2>{{ i18n "abstract" }}</h2>
+      <p>{{ . }}</p>
+    </section>
+    {{- end }}
+    {{- with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+  </div>
+
+  {{ partial "related_finder.html" . }}
+</article>

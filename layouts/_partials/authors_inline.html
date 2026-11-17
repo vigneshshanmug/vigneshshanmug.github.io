@@ -1,0 +1,22 @@
+{{/* Renders an author list with the site owner in bold.
+     Input: dict "authors" (slice) "short" (bool). Short mode abbreviates long lists to
+     first three … owner … last, so dense rows stay one or two lines. */}}
+{{- $authors := .authors | default slice -}}
+{{- $variants := site.Params.owner.name_variants -}}
+{{- $n := len $authors -}}
+{{- $ownerIdx := -1 -}}
+{{- range $i, $a := $authors -}}{{- if and (lt $ownerIdx 0) (in $variants $a) -}}{{- $ownerIdx = $i -}}{{- end -}}{{- end -}}
+{{- $show := slice -}}
+{{- if and .short (gt $n 8) -}}
+  {{- range $i, $a := $authors -}}
+    {{- if or (lt $i 3) (eq $i $ownerIdx) (eq $i (sub $n 1)) -}}{{- $show = $show | append (dict "i" $i "a" $a) -}}{{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- range $i, $a := $authors -}}{{- $show = $show | append (dict "i" $i "a" $a) -}}{{- end -}}
+{{- end -}}
+{{- $prev := -1 -}}
+{{- range $k, $x := $show -}}
+  {{- if gt $k 0 -}}{{- if gt (sub $x.i $prev) 1 -}}, …, {{ else }}, {{ end -}}{{- end -}}
+  {{- if eq $x.i $ownerIdx -}}<strong class="gk-owner">{{ $x.a }}</strong>{{- else -}}{{ $x.a }}{{- end -}}
+  {{- $prev = $x.i -}}
+{{- end -}}

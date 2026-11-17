@@ -1,0 +1,29 @@
+{{/* Injected at the end of <head> by Blox's head-end hook. */}}
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png" | relURL }}">
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
+<meta name="theme-color" content="#ffffff">
+
+{{- if ne site.Params.mysite.discovery false }}
+<meta name="generator" content="Created using GaryKing.org/mysite (https://gking.harvard.edu/mysite)">
+{{- if .IsHome }}
+<script type="application/ld+json">
+{{- $p := dict
+  "@context" "https://schema.org"
+  "@type" "Person"
+  "name" site.Params.owner.name
+  "jobTitle" site.Params.owner.title
+  "affiliation" (dict "@type" "Organization" "name" (index site.Params.owner.institutions 0))
+  "email" (printf "mailto:%s" (index site.Params.owner.emails 0))
+  "image" (resources.Get "images/portrait.jpg" | fingerprint).Permalink
+  "url" site.BaseURL
+  "isBasedOn" "https://gking.harvard.edu/mysite"
+-}}
+{{ $p | jsonify | safeJS }}
+</script>
+{{- end }}
+{{- end }}
+
+{{- if and (in (slice "publication" "talk") .Section) .IsPage (not .Params.private) }}
+  {{ partial "scholarly_meta.html" . }}
+{{- end }}

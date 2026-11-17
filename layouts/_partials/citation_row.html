@@ -1,0 +1,16 @@
+{{/* Dense citation row used on the Writings page and research-area lists.
+     Input: dict "page" "thumb" (bool). */}}
+{{- $p := .page -}}
+{{- $info := partial "item_info.html" $p -}}
+<div class="gk-cite-row{{ if .thumb }} has-thumb{{ end }}">
+  {{- if .thumb }}
+  <a class="gk-cite-row__thumb" href="{{ $p.RelPermalink }}" tabindex="-1" aria-hidden="true">{{ partial "thumb.html" (dict "page" $p "w" 104 "h" 78 "class" "" "lazy" true) }}</a>
+  {{- end }}
+  <div class="gk-cite-row__text">
+    <span class="gk-cite-authors">{{ partial "authors_inline.html" (dict "authors" $p.Params.authors "short" true) }}.</span>
+    {{ with $info.year }}<span class="gk-cite-year">{{ . }}.</span>{{ end }}
+    <a class="gk-cite-title" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>.
+    {{ with $p.Params.publication }}<em class="gk-cite-venue">{{ . }}</em>.{{ end }}
+    {{ with $p.Params.award }}<span class="gk-badge">{{ . }}</span>{{ end }}
+  </div>
+</div>

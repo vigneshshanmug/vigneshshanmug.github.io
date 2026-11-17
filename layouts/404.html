@@ -1,0 +1,9 @@
+{{ define "main" }}
+<div class="gk-page gk-404" data-pagefind-ignore>
+  <h1>{{ i18n "not_found_title" }}</h1>
+  <p>{{ i18n "not_found_body" }}</p>
+  <p><button type="button" class="gk-btn gk-btn--primary" data-search-open>{{ i18n "search_site" }}</button>
+     <a class="gk-btn gk-btn--chip" href="{{ "" | relURL }}">{{ i18n "home" }}</a>
+     <a class="gk-btn gk-btn--chip" href="{{ "publication/" | relURL }}">{{ i18n "writings" }}</a></p>
+</div>
+{{ end }}

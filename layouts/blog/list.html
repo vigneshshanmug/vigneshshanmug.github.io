@@ -1,0 +1,82 @@
+{{ define "main" }}
+{{/* Blog page = latest posts from the owner's Substack (read from its RSS feed at build time)
+     merged with any local posts in content/blog/. Substack images are downloaded and resized at
+     build time (no hotlinking). The site rebuilds daily (see .github/workflows/deploy.yml), so new
+     Substack posts appear within a day. If the feed can't be fetched, the page still builds and
+     shows a link to the Substack. */}}
+{{- $sub := site.Params.substack -}}
+{{- $posts := slice -}}
+
+{{- with $sub.url -}}
+  {{- $feedURL := printf "%s/feed" (strings.TrimSuffix "/" .) -}}
+  {{- with try (resources.GetRemote $feedURL (dict "headers" (dict "User-Agent" "Mozilla/5.0 (compatible; academic-site-build)"))) -}}
+    {{- with .Err -}}
+      {{- warnf "Substack feed could not be fetched: %s" . -}}
+    {{- else with .Value -}}
+      {{- $rss := . | transform.Unmarshal -}}
+      {{- $items := $rss.channel.item | default slice -}}
+      {{- if reflect.IsMap $items }}{{ $items = slice $items }}{{ end -}}
+      {{- range first ($sub.max_posts | default 30) $items -}}
+        {{- $img := "" -}}
+        {{- with .enclosure }}{{ with index . "-url" }}{{ $img = . }}{{ end }}{{ end -}}
+        {{- $posts = $posts | append (dict
+            "title" (.title | plainify | htmlUnescape)
+            "url" .link
+            "date" (time.AsTime .pubDate)
+            "summary" (.description | plainify | htmlUnescape)
+            "img" $img
+            "external" true) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- range .Pages -}}
+  {{- $posts = $posts | append (dict "title" .Title "url" .RelPermalink "date" .Date
+      "summary" (.Params.summary | default (.Summary | plainify | truncate 220))
+      "page" . "external" false "draft" .Draft) -}}
+{{- end -}}
+{{- $posts = sort $posts "date" "desc" -}}
+
+<div class="gk-page gk-blog" data-pagefind-body data-pagefind-meta="title:{{ .Title }}">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Content }}<div class="gk-subtitle prose">{{ . }}</div>{{ end }}
+  {{- with $sub.url }}
+  <p class="gk-blog__cta">
+    <a class="gk-btn gk-btn--primary" href="{{ strings.TrimSuffix "/" . }}/subscribe">{{ i18n "subscribe_substack" }}</a>
+    <a class="gk-link" href="{{ . }}">{{ $sub.name | default (i18n "read_on_substack") }} <span aria-hidden="true">↗</span></a>
+  </p>
+  {{- end }}
+
+  {{- if $posts }}
+  <ol class="gk-blog__list">
+    {{- range $posts }}
+    {{- $p := . -}}
+    {{- $thumb := "" -}}
+    {{- if and .external .img -}}
+      {{- with try (resources.GetRemote .img) }}{{ with .Value }}{{ $thumb = (.Fill "320x200 webp Center q78").RelPermalink }}{{ end }}{{ end -}}
+    {{- else if .page -}}
+      {{- with .page.Resources.GetMatch "featured.*" }}{{ $thumb = (.Fill "320x200 webp Center q78").RelPermalink }}{{ end -}}
+    {{- end }}
+    <li class="gk-post-row">
+      {{- with $thumb }}
+      <a class="gk-post-row__thumb" href="{{ $p.url }}" tabindex="-1" aria-hidden="true"><img src="{{ . }}" width="160" height="100" alt="" loading="lazy" decoding="async"></a>
+      {{- end }}
+      <div>
+        <p class="gk-post-row__meta">
+          <time datetime="{{ .date.Format "2006-01-02" }}">{{ .date.Format "Jan 2, 2006" }}</time>
+          {{- if .external }} · <span>Substack</span>{{ end }}
+          {{- if .draft }} · <span class="gk-badge">{{ i18n "draft" }}</span>{{ end }}
+        </p>
+        <h2 class="gk-post-row__title"><a href="{{ .url }}">{{ .title }}{{ if .external }} <span class="gk-ext" aria-label="(opens Substack)">↗</span>{{ end }}</a></h2>
+        {{ with .summary }}{{ if replaceRE `[.…\s]` "" . }}<p class="gk-post-row__summary">{{ . | truncate 240 }}</p>{{ end }}{{ end }}
+      </div>
+    </li>
+    {{- end }}
+  </ol>
+  {{- else }}
+  <p class="gk-muted">{{ i18n "no_posts" }}</p>
+  {{- end }}
+</div>
+{{ end }}

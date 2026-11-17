@@ -1,0 +1,44 @@
+{{/* Science / Medicine page: intro (page Markdown) + themes from data/themes.yaml[group].
+     Input: dict "page" "group". Each theme = heading, summary, featured papers (thumbnail citation cards). */}}
+{{- $page := .page -}}
+{{- $themes := index site.Data.themes .group -}}
+<article class="gk-page gk-themes" data-pagefind-body data-pagefind-meta="title:{{ $page.Title }}">
+  <h1>{{ $page.Title }}</h1>
+  <div class="gk-themes__intro prose">{{ $page.Content }}</div>
+
+  {{- if gt (len $themes) 1 }}
+  <nav class="gk-themes__toc" aria-label="{{ i18n "on_this_page" }}">
+    {{- range $themes }}<a href="#{{ .id }}">{{ .title }}</a>{{ end }}
+  </nav>
+  {{- end }}
+
+  {{- range $themes }}
+  <section class="gk-theme" id="{{ .id }}" aria-labelledby="{{ .id }}-h">
+    <h2 id="{{ .id }}-h">{{ .title }}</h2>
+    {{ with .summary }}<p class="gk-theme__summary">{{ . }}</p>{{ end }}
+    <ul class="gk-theme__papers">
+      {{- range .papers }}
+      {{- with site.GetPage (printf "/publication/%s" .) }}
+      {{- $info := partial "item_info.html" . }}
+      <li class="gk-card">
+        <a class="gk-card__thumb" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">{{ partial "thumb.html" (dict "page" . "w" 360 "h" 200 "class" "" "lazy" true) }}</a>
+        <div class="gk-card__body">
+          <a class="gk-card__title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          <p class="gk-card__authors">{{ partial "authors_inline.html" (dict "authors" .Params.authors "short" true) }}</p>
+          <p class="gk-card__venue"><em>{{ .Params.journal | default .Params.publication }}</em>{{ with $info.year }} · {{ . }}{{ end }}</p>
+          <div class="gk-card__actions">
+            {{- with .Params.abstract }}<details class="gk-abs"><summary>{{ i18n "abstract" }}</summary><div class="gk-abs__body">{{ . }}</div></details>{{ end }}
+            {{- range first 1 .Params.links }}<a class="gk-link" href="{{ .url }}">{{ .name }}</a>{{ end }}
+          </div>
+        </div>
+      </li>
+      {{- else }}
+      {{- warnf "themes.yaml: no publication folder named %q" . -}}
+      {{- end }}
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  <p class="gk-themes__all"><a class="gk-link" href="{{ "publication/" | relURL }}">{{ i18n "all_publications" }} <span aria-hidden="true">→</span></a></p>
+</article>

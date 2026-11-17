@@ -1,0 +1,102 @@
+{{/* Homepage: hero (short bio, lab photo) → About (long bio, portrait) → Science / Medicine overview. */}}
+{{- $o := site.Params.owner -}}
+{{- /* Photos live in assets/images/ and get a content fingerprint in their URL, so a replaced photo is never served stale from a browser cache. */ -}}
+{{- $hero := resources.Get "images/hero-lab.jpg" | fingerprint -}}
+{{- $portrait := resources.Get "images/portrait.jpg" | fingerprint -}}
+<section id="hero" class="gk-hero">
+  <div class="gk-hero__inner">
+    <div class="gk-hero__text">
+      <h1 class="gk-hero__name">{{ $o.name }}</h1>
+      <p class="gk-hero__title">{{ $o.title }}</p>
+      <div class="gk-hero__intro"><p>{{ .Params.intro }}</p></div>
+      <p class="gk-hero__actions">
+        <a class="gk-btn gk-btn--primary" href="{{ "science/" | relURL }}">{{ i18n "science" }} <span aria-hidden="true">→</span></a>
+        <a class="gk-btn gk-btn--primary" href="{{ "medicine/" | relURL }}">{{ i18n "medicine" }} <span aria-hidden="true">→</span></a>
+      </p>
+    </div>
+    <div class="gk-hero__photo">
+      <img src="{{ $hero.RelPermalink }}" width="900" height="900" alt="{{ $o.name }} in the laboratory at Brigham and Women's Hospital">
+    </div>
+  </div>
+</section>
+
+<section id="about" class="gk-about" aria-labelledby="about-h" data-pagefind-body data-pagefind-meta="title:About {{ $o.name }}">
+  <h2 id="about-h">{{ i18n "about" }}</h2>
+  <div class="gk-about__grid">
+    <img class="gk-portrait" src="{{ $portrait.RelPermalink }}" width="200" height="200" alt="Portrait of {{ $o.name }}, Brigham and Women's Hospital" loading="lazy">
+    <div class="prose">{{ .Content }}</div>
+  </div>
+</section>
+
+{{- with .Params.video }}
+{{- $v := . }}
+{{- $poster := resources.Get .poster }}
+{{- $p := $poster.Resize "1280x webp q80" }}
+{{- $watch := printf "https://www.youtube.com/watch?v=%s" .youtube_id }}
+<section id="video" class="gk-video" aria-labelledby="video-h">
+  <h2 id="video-h">{{ .title }}</h2>
+  {{/* Click-to-load embed: a local poster image links to YouTube (works without JS); JS swaps in the
+       privacy-enhanced player only when the visitor presses play, so nothing loads from YouTube before that. */}}
+  <div class="gk-video__frame">
+    <a class="gk-video__poster" href="{{ $watch }}" data-yt="{{ .youtube_id }}" data-title="{{ .title }}" aria-label="{{ i18n "play_video" }}: {{ .title }}">
+      <img src="{{ $p.RelPermalink }}" width="{{ div $p.Width 2 }}" height="{{ div $p.Height 2 }}" alt="" loading="lazy" decoding="async">
+      <span class="gk-video__play" aria-hidden="true"><svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.3.3 34 .3 34 .3s-21.3 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 12.9.1 24 .1 24s0 11.1 1.4 16.3a8.5 8.5 0 0 0 6 6C12.7 47.7 34 47.7 34 47.7s21.3 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35.1 67.9 24 67.9 24s0-11.1-1.4-16.3z" fill="#212121" fill-opacity=".85"/><path d="M45 24 27 14v20z" fill="#fff"/></svg></span>
+    </a>
+  </div>
+  <p class="gk-video__caption">{{ with .caption }}{{ . }} {{ end }}<a class="gk-link" href="{{ $watch }}">{{ i18n "watch_on_youtube" }} <span aria-hidden="true">↗</span></a></p>
+</section>
+<script>
+(function(){
+  document.querySelectorAll('.gk-video__poster[data-yt]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + a.dataset.yt + '?autoplay=1&rel=0&modestbranding=1';
+      f.title = a.dataset.title;
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true; f.referrerPolicy = 'strict-origin-when-cross-origin';
+      a.replaceWith(f); f.focus();
+    });
+  });
+})();
+</script>
+{{- end }}
+
+<section id="work" class="gk-work" aria-label="{{ i18n "work" }}">
+  <div class="gk-work__grid">
+    {{- range slice "science" "medicine" }}
+    {{- $g := . }}
+    {{- with site.GetPage (printf "/%s" $g) }}
+    <div class="gk-work__card">
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <ul class="gk-tiles">
+        {{- range index site.Data.themes $g }}
+        {{- /* image: theme's own `image:` → else first listed paper with a real figure → else first paper's tile */ -}}
+        {{- $img := "" -}}
+        {{- with .image }}{{ $img = resources.Get . }}{{ end -}}
+        {{- if not $img -}}
+          {{- range .papers }}{{ if not $img }}{{ with site.GetPage (printf "/publication/%s" .) }}{{ if eq .Params.thumbnail_kind "figure" }}{{ $img = .Resources.GetMatch "featured.*" }}{{ end }}{{ end }}{{ end }}{{ end -}}
+        {{- end -}}
+        {{- if not $img }}{{ with index .papers 0 }}{{ with site.GetPage (printf "/publication/%s" .) }}{{ $img = .Resources.GetMatch "featured.*" }}{{ end }}{{ end }}{{ end -}}
+        <li class="gk-tile">
+          <a href="{{ $.RelPermalink }}{{ $g }}/#{{ .id }}">
+            {{- with $img }}{{ $t := .Fill "480x300 webp Center q80" }}<img src="{{ $t.RelPermalink }}" width="240" height="150" alt="" loading="lazy" decoding="async">{{ end }}
+            <span class="gk-tile__label">{{ .title }}</span>
+          </a>
+        </li>
+        {{- end }}
+      </ul>
+      <p><a class="gk-link" href="{{ .RelPermalink }}">{{ i18n (printf "explore_%s" $g) }} <span aria-hidden="true">→</span></a></p>
+    </div>
+    {{- end }}
+    {{- end }}
+  </div>
+  {{- $credits := slice -}}
+  {{- range $g, $ts := site.Data.themes }}{{ range $ts }}{{ with .image_credit }}{{ $credits = $credits | append . }}{{ end }}{{ end }}{{ end -}}
+  {{- with $credits }}
+  <details class="gk-credits">
+    <summary>{{ i18n "image_credits" }}</summary>
+    <ul>{{ range . }}<li>{{ . | safeHTML }}</li>{{ end }}</ul>
+  </details>
+  {{- end }}
+</section>

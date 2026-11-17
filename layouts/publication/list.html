@@ -1,0 +1,221 @@
+{{ define "main" }}
+{{- $pages := where site.RegularPages "Section" "in" (slice "publication" "talk") -}}
+{{- $pages = sort $pages "Date" "desc" -}}
+{{- $tabDefs := slice
+  (dict "id" "articles" "label" (i18n "tab_articles"))
+  (dict "id" "working-papers" "label" (i18n "tab_working_papers"))
+  (dict "id" "book" "label" (i18n "tab_books"))
+  (dict "id" "presentations" "label" (i18n "tab_presentations"))
+  (dict "id" "software" "label" (i18n "tab_software"))
+  (dict "id" "data" "label" (i18n "tab_data"))
+  (dict "id" "patents" "label" (i18n "tab_patents"))
+-}}
+{{- $entries := slice -}}
+{{- $years := slice -}}
+{{- $present := slice -}}
+{{- range $i, $p := $pages -}}
+  {{- $info := partial "item_info.html" $p -}}
+  {{- $present = $present | append $info.tab -}}
+  {{- with $info.year }}{{ $years = $years | append . }}{{ end -}}
+  {{- $slug := path.Base $p.File.Dir -}}
+  {{- $themesOf := slice -}}
+  {{- if eq $p.Section "publication" }}{{ range $g, $ts := site.Data.themes }}{{ range $ts }}{{ if in .papers $slug }}{{ $themesOf = $themesOf | append .id }}{{ end }}{{ end }}{{ end }}{{ end -}}
+  {{- $entries = $entries | append (dict
+      "i" $i "title" $p.Title "url" $p.RelPermalink "year" $info.year "date" ($p.Date.Format "2006-01-02")
+      "authors" ($p.Params.authors | default slice) "venue" ($p.Params.publication | default "")
+      "journal" ($p.Params.journal | default "") "abstract" ($p.Params.abstract | default "" | plainify)
+      "tab" $info.tab "tags" ($p.Params.tags | default slice) "doi" ($p.Params.doi | default "")
+      "types" ($p.Params.publication_types | default slice) "slug" (path.Base $p.File.Dir)
+      "themes" $themesOf) -}}
+{{- end -}}
+{{- $years = $years | uniq | sort | collections.Reverse -}}
+
+<div class="gk-page gk-writings">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  {{ with .Params.subtitle }}<p class="gk-subtitle">{{ . }}</p>{{ end }}
+
+  <nav class="pub-tabs" role="tablist" aria-label="{{ i18n "writing_types" }}">
+    <button class="tab-btn active" data-tab="all" role="tab" aria-selected="true">{{ i18n "tab_all" }} <span class="tab-count">{{ len $pages }}</span></button>
+    {{- range $tabDefs }}
+      {{- if in $present .id }}
+      {{- $id := .id -}}
+      {{- $n := 0 }}{{ range $present }}{{ if eq . $id }}{{ $n = add $n 1 }}{{ end }}{{ end -}}
+      <button class="tab-btn" data-tab="{{ .id }}" role="tab" aria-selected="false">{{ .label }} <span class="tab-count">{{ $n }}</span></button>
+      {{- end }}
+    {{- end }}
+  </nav>
+
+  <div class="gk-writings__layout">
+    <aside class="pub-filters" aria-label="{{ i18n "filters" }}">
+      <label class="pub-filters__label" for="pub-q">{{ i18n "search_writings" }}</label>
+      <input id="pub-q" type="search" placeholder="{{ i18n "search_writings_ph" }}" autocomplete="off">
+
+      <label class="pub-filters__label" for="pub-area">{{ i18n "research_area" }}</label>
+      <select id="pub-area">
+        <option value="">{{ i18n "all_areas" }}</option>
+        {{- range $g := slice "science" "medicine" }}
+        <optgroup label="{{ i18n $g }}">
+          {{- range index site.Data.themes $g }}<option value="{{ .id }}">{{ .title }}</option>{{ end }}
+        </optgroup>
+        {{- end }}
+      </select>
+
+      <fieldset class="pub-filters__years">
+        <legend class="pub-filters__label">{{ i18n "year" }}</legend>
+        <div class="pub-years">
+          {{- range $years }}
+          <label class="pub-check"><input type="checkbox" value="{{ . }}"><span>{{ . }}</span></label>
+          {{- end }}
+        </div>
+      </fieldset>
+      <button type="button" id="pub-reset" class="gk-btn gk-btn--quiet">{{ i18n "reset_filters" }}</button>
+    </aside>
+
+    <section class="pub-results" aria-label="{{ i18n "results" }}">
+      <div class="pub-toolbar">
+        <p class="result-count" aria-live="polite">{{ len $pages }} of {{ len $pages }} {{ i18n "results" }}</p>
+        <div class="pub-toolbar__right">
+          <label for="pub-sort" class="sr-only">{{ i18n "sort" }}</label>
+          <select id="pub-sort">
+            <option value="new">{{ i18n "sort_new" }}</option>
+            <option value="old">{{ i18n "sort_old" }}</option>
+            <option value="az">{{ i18n "sort_az" }}</option>
+            <option value="za">{{ i18n "sort_za" }}</option>
+          </select>
+          <button type="button" id="pub-bib" class="gk-btn gk-btn--chip">{{ i18n "download_citations" }}</button>
+        </div>
+      </div>
+      <div class="pub-list" id="pub-list">
+        {{- range $i, $p := $pages }}
+        {{- $info := partial "item_info.html" $p }}
+        <article class="pub-item" data-i="{{ $i }}" data-tab="{{ $info.tab }}" data-year="{{ $info.year }}" data-types='{{ $p.Params.publication_types | default slice | jsonify }}'>
+          {{ partial "citation_row.html" (dict "page" $p "thumb" true) }}
+        </article>
+        {{- end }}
+      </div>
+      <p class="pub-empty" hidden>{{ i18n "no_results" }}</p>
+    </section>
+  </div>
+</div>
+
+<script>
+(function(){
+  var data = {{ $entries | jsonify | safeJS }};
+  var tabs = document.querySelectorAll('.tab-btn');
+  var list = document.getElementById('pub-list');
+  var items = Array.prototype.slice.call(list.querySelectorAll('.pub-item'));
+  var countEl = document.querySelector('.result-count');
+  var q = document.getElementById('pub-q'), areaSel = document.getElementById('pub-area'),
+      sortSel = document.getElementById('pub-sort'), yearBoxes = document.querySelectorAll('.pub-years input'),
+      empty = document.querySelector('.pub-empty');
+  var state = { tab:'all', q:'', area:'', years:[], sort:'new' };
+  var validTabs = Array.prototype.map.call(tabs, function(b){ return b.dataset.tab; });
+
+  function norm(s){ return String(s||'').toLowerCase(); }
+
+  function apply(push){
+    var qq = norm(state.q), visible = 0;
+    items.forEach(function(el){
+      var d = data[+el.dataset.i];
+      var show = (state.tab === 'all') || (el.dataset.tab === state.tab);
+      if (show && state.area) show = (d.themes || []).indexOf(state.area) > -1;
+      if (show && state.years.length) show = state.years.indexOf(d.year) > -1;
+      if (show && qq) show = norm([d.title, d.authors.join(' '), d.venue, d.abstract].join(' ')).indexOf(qq) > -1;
+      el.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    countEl.textContent = visible + ' of ' + items.length + ' results';
+    empty.hidden = visible > 0;
+    tabs.forEach(function(btn){
+      var on = btn.dataset.tab === state.tab;
+      btn.classList.toggle('active', on); btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    sortItems();
+    writeHash(push);
+  }
+
+  function sortItems(){
+    var key = state.sort;
+    items.slice().sort(function(a,b){
+      var A = data[+a.dataset.i], B = data[+b.dataset.i];
+      if (key === 'az' || key === 'za'){ var c = A.title.localeCompare(B.title); return key === 'az' ? c : -c; }
+      var c2 = (A.date||'').localeCompare(B.date||''); return key === 'old' ? c2 : -c2;
+    }).forEach(function(el){ list.appendChild(el); });
+  }
+
+  function writeHash(push){
+    var parts = [];
+    if (state.area || state.q || state.years.length || state.sort !== 'new'){
+      if (state.tab !== 'all') parts.push('tab=' + state.tab);
+      if (state.area) parts.push('area=' + encodeURIComponent(state.area));
+      if (state.q) parts.push('q=' + encodeURIComponent(state.q));
+      if (state.years.length) parts.push('years=' + state.years.join(','));
+      if (state.sort !== 'new') parts.push('sort=' + state.sort);
+    } else if (state.tab !== 'all') { parts.push(state.tab); }
+    var h = parts.length ? '#' + parts.join('&') : location.pathname + location.search;
+    if (('#' + parts.join('&')) === location.hash) return;
+    if (push) history.pushState(null, '', h); else history.replaceState(null, '', h);
+  }
+
+  function readHash(){
+    var h = location.hash.replace(/^#/, '');
+    state = { tab:'all', q:'', area:'', years:[], sort:'new' };
+    if (h && h.indexOf('=') < 0) { if (validTabs.indexOf(h) > -1) state.tab = h; }
+    else h.split('&').forEach(function(kv){
+      var p = kv.split('='), k = p[0], v = decodeURIComponent(p[1]||'');
+      if (k==='tab' && validTabs.indexOf(v) > -1) state.tab = v;
+      if (k==='area') state.area = v;
+      if (k==='q') state.q = v;
+      if (k==='years') state.years = v.split(',').filter(Boolean);
+      if (k==='sort') state.sort = v;
+    });
+    q.value = state.q; areaSel.value = state.area; sortSel.value = state.sort;
+    yearBoxes.forEach(function(b){ b.checked = state.years.indexOf(b.value) > -1; });
+  }
+
+  tabs.forEach(function(btn){ btn.addEventListener('click', function(){ state.tab = btn.dataset.tab; apply(true); }); });
+  var t; q.addEventListener('input', function(){ clearTimeout(t); t = setTimeout(function(){ state.q = q.value.trim(); apply(false); }, 150); });
+  areaSel.addEventListener('change', function(){ state.area = areaSel.value; apply(true); });
+  sortSel.addEventListener('change', function(){ state.sort = sortSel.value; apply(false); });
+  yearBoxes.forEach(function(b){ b.addEventListener('change', function(){
+    state.years = Array.prototype.filter.call(yearBoxes, function(x){ return x.checked; }).map(function(x){ return x.value; });
+    apply(false);
+  }); });
+  document.getElementById('pub-reset').addEventListener('click', function(){
+    state = { tab:state.tab, q:'', area:'', years:[], sort:'new' };
+    q.value=''; areaSel.value=''; sortSel.value='new'; yearBoxes.forEach(function(b){ b.checked=false; });
+    apply(true);
+  });
+  window.addEventListener('popstate', function(){ readHash(); apply(false); });
+  window.addEventListener('hashchange', function(){ readHash(); apply(false); });
+
+  // BibTeX export of currently visible entries
+  function bibKey(d){
+    var first = (d.authors[0]||'anon').split(/\s+/).pop().replace(/[^A-Za-z]/g,'');
+    var w = (d.title.match(/[A-Za-z]{4,}/)||['x'])[0];
+    return (first + (d.year||'') + w).toLowerCase();
+  }
+  function bibEsc(s){ return String(s).replace(/[{}]/g,''); }
+  document.getElementById('pub-bib').addEventListener('click', function(){
+    var out = items.filter(function(el){ return el.style.display !== 'none'; }).map(function(el){
+      var d = data[+el.dataset.i];
+      var type = d.tab === 'presentations' ? 'misc' : (d.tab === 'book' ? 'incollection' : 'article');
+      var f = ['  title = {' + bibEsc(d.title) + '}', '  author = {' + bibEsc(d.authors.join(' and ')) + '}'];
+      if (d.year) f.push('  year = {' + d.year + '}');
+      if (type === 'article' && d.journal) f.push('  journal = {' + bibEsc(d.journal) + '}');
+      if (type === 'incollection') f.push('  booktitle = {' + bibEsc(d.venue) + '}');
+      if (type === 'misc') f.push('  howpublished = {' + bibEsc(d.venue) + '}');
+      if (d.doi) f.push('  doi = {' + d.doi + '}');
+      f.push('  url = {' + new URL(d.url, location.href).href + '}');
+      return '@' + type + '{' + bibKey(d) + ',\n' + f.join(',\n') + '\n}';
+    }).join('\n\n');
+    var blob = new Blob([out], {type:'application/x-bibtex'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'shanmugam-citations.bib';
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);
+  });
+
+  readHash(); apply(false);
+})();
+</script>
+{{ end }}

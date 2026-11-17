@@ -1,0 +1,41 @@
+---
+title: "Human MYD88L265P is insufficient by itself to drive neoplastic transformation in mature mouse B cells"
+date: 2019-11-12
+authors:
+  - "Tomasz Sewastianik"
+  - "Maria Luisa Guerrera"
+  - "Keith Adler"
+  - "Peter S. Dennis"
+  - "Kyle Wright"
+  - "Vignesh Shanmugam"
+  - "Ying Huang"
+  - "Helen Tanton"
+  - "Meng Jiang"
+  - "Amanda Kofides"
+  - "Maria G. Demos"
+  - "Audrey Dalgarno"
+  - "Neil A. Patel"
+  - "Anwesha Nag"
+  - "Geraldine S. Pinkus"
+  - "Guang Yang"
+  - "Zachary R. Hunter"
+  - "Petr Jarolim"
+  - "Nikhil C. Munshi"
+  - "Steven P. Treon"
+  - "Ruben D. Carrasco"
+publication_types: ["journal_article"]
+publication: "Blood Advances, 3(21), 3360–3374"
+journal: "Blood Advances"
+doi: "10.1182/bloodadvances.2019000588"
+abstract: "MYD88 L265P is the most common mutation in lymphoplasmacytic lymphoma/Waldenström macroglobulinemia (LPL/WM) and one of the most frequent in poor-prognosis subtypes of diffuse large B-cell lymphoma (DLBCL). Although inhibition of the mutated MYD88 pathway has an adverse impact on LPL/WM and DLBCL cell survival, its role in lymphoma initiation remains to be clarified. We show that in mice, human MYD88L265P promotes development of a non-clonal, low-grade B-cell lymphoproliferative disorder with several clinicopathologic features that resemble human LPL/WM, including expansion of lymphoplasmacytoid cells, increased serum immunoglobulin M (IgM) concentration, rouleaux formation, increased number of mast cells in the bone marrow, and proinflammatory signaling that progresses sporadically to clonal, high-grade DLBCL. Murine findings regarding differences in the pattern of MYD88 staining and immune infiltrates in the bone marrows of MYD88 wild-type (MYD88WT) and MYD88L265P mice are recapitulated in the human setting, which provides insight into LPL/WM pathogenesis. Furthermore, histologic transformation to DLBCL is associated with acquisition of secondary genetic lesions frequently seen in de novo human DLBCL as well as LPL/WM-transformed cases. These findings indicate that, although the MYD88L265P mutation might be indispensable for the LPL/WM phenotype, it is insufficient by itself to drive malignant transformation in B cells and relies on other, potentially targetable cooperating genetic events for full development of lymphoma."
+links:
+  - name: "Publisher's Version"
+    url: "https://doi.org/10.1182/bloodadvances.2019000588"
+  - name: "Free Full Text (PMC)"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6855113/"
+  - name: "PubMed"
+    url: "https://pubmed.ncbi.nlm.nih.gov/31698464/"
+tags: ["lymphoma-biology", "B-cell lymphoma"]
+image_credit: "Figure from Blood Advances"
+thumbnail_kind: "figure"
+---

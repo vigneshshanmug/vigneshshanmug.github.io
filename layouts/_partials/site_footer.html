@@ -1,0 +1,25 @@
+{{- $home := "" | relURL -}}
+<footer class="gk-footer">
+  <div class="gk-footer__inner">
+    <div class="gk-footer__id">
+      <p class="gk-footer__name">{{ site.Params.owner.name }}</p>
+      <p>{{ delimit site.Params.owner.institutions " · " }}</p>
+      <p>{{ range $i, $e := site.Params.owner.emails }}{{ if $i }} · {{ end }}<a href="mailto:{{ $e }}">{{ $e }}</a>{{ end }}</p>
+    </div>
+    <nav class="gk-footer__nav" aria-label="{{ i18n "footer_navigation" }}">
+      <ul>
+        {{- range site.Menus.main -}}
+          {{- $href := cond (hasPrefix .URL "#") (printf "%s%s" $home .URL) (.URL | relURL) -}}
+          <li><a href="{{ $href }}">{{ .Name }}</a></li>
+        {{- end -}}
+        <li><a href="{{ "index.xml" | relURL }}">RSS</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="gk-footer__bottom">
+    <p>© {{ now.Year }} {{ site.Params.owner.name }}</p>
+    {{- if ne site.Params.mysite.credit false }}
+    <p class="gk-footer__credit">Created using <a href="https://garyking.org/mysite">GaryKing.org/mysite</a></p>
+    {{- end }}
+  </div>
+</footer>

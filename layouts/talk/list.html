@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="gk-page">
+  {{ partial "breadcrumbs.html" . }}
+  <h1>{{ .Title }}</h1>
+  <p class="gk-subtitle"><a class="gk-link" href="{{ "publication/" | relURL }}#presentations">{{ i18n "filter_in_writings" }} <span aria-hidden="true">→</span></a></p>
+  <div class="pub-list">
+    {{- range .Pages.ByDate.Reverse }}
+    <article class="pub-item">{{ partial "citation_row.html" (dict "page" . "thumb" true) }}</article>
+    {{- end }}
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,12 @@
+# Vignesh Shanmugam
+
+> Vignesh Shanmugam, M.D., is a Clinical Investigator and Staff Pathologist at Brigham and Women's Hospital, and Instructor in Pathology at Harvard Medical School. He leads a research program on the spatial ecology of lymphoma, spatial genomics methods, and oncogenic B-cell signaling. He is a hematopathologist and molecular pathologist.
+
+## Key pages
+
+- [About](https://vigneshshanmug.github.io/vigneshshan.github.io/#about): short and long biography
+- [Science](https://vigneshshanmug.github.io/vigneshshan.github.io/science/): research themes and key papers
+- [Medicine](https://vigneshshanmug.github.io/vigneshshan.github.io/medicine/): hematopathology and molecular pathology practice and clinical research
+- [Publications](https://vigneshshanmug.github.io/vigneshshan.github.io/publication/): all articles, book chapters and presentations, with abstracts and DOIs
+- [Blog](https://vigneshshanmug.github.io/vigneshshan.github.io/blog/): posts from Substack
+- [Contact](https://vigneshshanmug.github.io/vigneshshan.github.io/contact/): vshanmugam@bwh.harvard.edu, vshanmug@broadinstitute.org

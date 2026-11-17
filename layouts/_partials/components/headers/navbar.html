@@ -1,0 +1,45 @@
+{{/* Institutional banner + main navbar.
+     Brand = owner's full name (uppercase, bold), links home on every page.
+     Nav links flush right; search = plain magnifying-glass icon; hamburger on mobile. */}}
+{{- $home := "" | relURL -}}
+<div class="gk-banner" role="presentation">
+  <div class="gk-banner__inner">
+    <span class="gk-banner__orgs">
+      {{- range $i, $org := site.Params.owner.institutions -}}
+        {{- if $i }}<span class="gk-banner__sep" aria-hidden="true">·</span>{{ end -}}
+        <span>{{ $org }}</span>
+      {{- end -}}
+    </span>
+  </div>
+</div>
+<header class="gk-header">
+  <nav class="gk-nav" aria-label="{{ i18n "main_navigation" }}">
+    <a class="gk-brand" href="{{ $home }}">{{ site.Params.header.navbar.logo.text | default site.Title }}</a>
+    <button class="gk-nav__toggle" type="button" aria-expanded="false" aria-controls="gk-nav-menu" aria-label="{{ i18n "open_menu" }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <ul id="gk-nav-menu" class="gk-nav__menu">
+      {{- $current := . -}}
+      {{- range site.Menus.main -}}
+        {{- $href := "" -}}
+        {{- if hasPrefix .URL "#" -}}{{- $href = printf "%s%s" $home .URL -}}{{- else -}}{{- $href = .URL | relURL -}}{{- end -}}
+        {{- $active := and (not (hasPrefix .URL "#")) (hasPrefix $current.RelPermalink (.URL | relURL)) -}}
+        <li><a class="gk-nav__link{{ if $active }} is-active{{ end }}" href="{{ $href }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a></li>
+      {{- end -}}
+    </ul>
+    <button type="button" class="gk-nav__search" data-search-open aria-label="{{ i18n "search_site" }} (Ctrl+K)">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+  </nav>
+</header>
+<script>
+(function(){
+  var b=document.querySelector('.gk-nav__toggle'), m=document.getElementById('gk-nav-menu');
+  if(!b||!m) return;
+  b.addEventListener('click',function(){
+    var open=b.getAttribute('aria-expanded')==='true';
+    b.setAttribute('aria-expanded',open?'false':'true'); m.classList.toggle('is-open',!open);
+  });
+  m.addEventListener('click',function(e){ if(e.target.closest('a')){ b.setAttribute('aria-expanded','false'); m.classList.remove('is-open'); }});
+})();
+</script>

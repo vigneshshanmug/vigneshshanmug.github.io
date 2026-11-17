@@ -1,0 +1,24 @@
+{{ define "main" }}
+<article class="gk-page gk-post" data-pagefind-body data-pagefind-meta="title:{{ .Title }}">
+  {{ partial "breadcrumbs.html" . }}
+  <header class="gk-post__header">
+    <h1>{{ .Title }}</h1>
+    <p class="gk-post__meta">
+      <span>{{ site.Params.owner.name }}</span> ·
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+      · {{ .ReadingTime }} {{ i18n "min_read" }}
+      {{- if .Draft }} · <span class="gk-badge">{{ i18n "draft" }}</span>{{ end }}
+    </p>
+  </header>
+  {{- with .Resources.GetMatch "featured.*" }}
+  {{- $r := .Resize "1200x webp q80" }}
+  <figure class="gk-post__image"><img src="{{ $r.RelPermalink }}" width="{{ div $r.Width 2 }}" height="{{ div $r.Height 2 }}" alt="{{ $.Params.image_alt | default $.Title }}">{{ with $.Params.image_credit }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
+  {{- end }}
+  <div class="prose gk-post__body">{{ .Content }}</div>
+  {{ with .Params.tags }}<p class="gk-post__tags">{{ i18n "topics" }}: {{ delimit . ", " }}</p>{{ end }}
+  <nav class="gk-post__pager" aria-label="{{ i18n "more_posts" }}">
+    {{ with .NextInSection }}<a class="gk-link" href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}
+    {{ with .PrevInSection }}<a class="gk-link" href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+  </nav>
+</article>
+{{ end }}
