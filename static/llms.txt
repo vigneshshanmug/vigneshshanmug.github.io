@@ -9,4 +9,4 @@
 - [Medicine](https://vigneshshanmug.github.io/medicine/): hematopathology and molecular pathology practice and clinical research
 - [Publications](https://vigneshshanmug.github.io/publication/): all articles, book chapters and presentations, with abstracts and DOIs
 - [Blog](https://vigneshshanmug.github.io/blog/): posts from Substack
-- [Contact](https://vigneshshanmug.github.io/contact/): vshanmugam@bwh.harvard.edu
+- [Contact](https://vigneshshanmug.github.io/contact/): email and addresses

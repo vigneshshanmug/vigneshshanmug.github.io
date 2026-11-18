@@ -114,3 +114,10 @@ Search works only on the published site (or after `hugo && npx pagefind --site p
 The site uses GoatCounter (free, no cookies). Your dashboard: `https://<code>.goatcounter.com`.
 The code is set in `hugo.yaml` → `params.analytics.goatcounter`; set it to `""` to switch tracking off.
 Local previews are never counted, only the published site.
+
+## Your email address (spam protection)
+
+Your email appears only on the Contact page, written as `{{< email >}}` in `content/contact/index.md`.
+The address itself lives in `hugo.yaml` → `params.owner.emails`; it is stored encoded in the page so spam
+bots can't harvest it, and a small script shows it as a normal clickable link to visitors.
+Don't type the address directly into pages, or bots will find it again.

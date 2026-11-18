@@ -1,5 +1,6 @@
 ---
 title: "Contact"
+summary: "Contact information for Vignesh Shanmugam, Brigham and Women's Hospital and the Broad Institute."
 ---
 <div class="gk-contact-grid">
 <div class="gk-contact-card">
@@ -9,7 +10,7 @@ title: "Contact"
 Department of Pathology<br>
 Boston, MA 02115
 
-Email: [vshanmugam@bwh.harvard.edu](mailto:vshanmugam@bwh.harvard.edu)
+Email: {{< email >}}
 
 </div>
 <div class="gk-contact-card">

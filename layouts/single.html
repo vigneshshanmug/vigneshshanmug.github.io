@@ -10,7 +10,7 @@
       <p class="gk-bio-head__name">{{ site.Params.owner.name }}, M.D.</p>
       <p>{{ site.Params.owner.title }}</p>
       <p class="gk-muted">{{ delimit site.Params.owner.institutions " · " }}</p>
-      <p>{{ range $i, $e := site.Params.owner.emails }}{{ if $i }} · {{ end }}<a href="mailto:{{ $e }}">{{ $e }}</a>{{ end }}</p>
+      <p>{{ partial "email_link.html" (index site.Params.owner.emails 0) }}</p>
     </div>
   </div>
   {{- end }}

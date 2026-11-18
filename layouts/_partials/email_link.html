@@ -1,0 +1,10 @@
+{{/* Spam-resistant email link. The address never appears as plain text in the HTML:
+     user and domain are stored base64-encoded and reversed; a tiny script turns them into a normal
+     mailto link for people. Without JavaScript it reads "name [at] domain [dot] edu".
+     Input: the email address (string). */}}
+{{- $parts := split . "@" -}}
+{{- $u := index $parts 0 -}}
+{{- $d := index $parts 1 -}}
+{{- $enc := printf "%s|%s" ($u | base64Encode) ($d | base64Encode) -}}
+{{- $rev := delimit (collections.Reverse (split $enc "")) "" -}}
+<a class="gk-email" href="#" data-e="{{ $rev }}">{{ $u }} [at] {{ replace $d "." " [dot] " }}</a>

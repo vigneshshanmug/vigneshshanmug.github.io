@@ -1,0 +1,12 @@
+<script>
+/* Decode spam-resistant email links (see _partials/email_link.html). */
+(function(){
+  document.querySelectorAll('a.gk-email[data-e]').forEach(function(a){
+    try {
+      var p = a.dataset.e.split('').reverse().join('').split('|');
+      var addr = atob(p[0]) + '@' + atob(p[1]);
+      a.href = 'mailto:' + addr; a.textContent = addr; a.removeAttribute('data-e');
+    } catch (e) {}
+  });
+})();
+</script>

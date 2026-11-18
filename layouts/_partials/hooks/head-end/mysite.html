@@ -14,7 +14,6 @@
   "name" site.Params.owner.name
   "jobTitle" site.Params.owner.title
   "affiliation" (dict "@type" "Organization" "name" (index site.Params.owner.institutions 0))
-  "email" (printf "mailto:%s" (index site.Params.owner.emails 0))
   "image" (resources.Get "images/portrait.jpg" | fingerprint).Permalink
   "url" site.BaseURL
   "sameAs" (apply (site.Params.owner.social | default slice) "index" "." "url")
